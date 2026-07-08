@@ -3,7 +3,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebas
 import {
   getDatabase,
   ref,
-  push
+  push,
+  onValue,
+  query,
+  limitToLast
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -13,34 +16,72 @@ const firebaseConfig = {
   projectId: "monitijationhelper",
   storageBucket: "monitijationhelper.firebasestorage.app",
   messagingSenderId: "251665802546",
-  appId: "1:251665802546:web:c41a366f15323b4bcaa32b",
-  measurementId: "G-XESR0WHY6T"
+  appId: "1:251665802546:web:c41a366f15323b4bcaa32b"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+const chatBox = document.getElementById("chatBox");
 const sendBtn = document.getElementById("sendBtn");
 
-sendBtn.addEventListener("click", function () {
+sendBtn.onclick = () => {
 
-  const text = document.getElementById("text").value.trim();
+  const text = document.getElementById("message").value.trim();
   const reference = document.getElementById("reference").value.trim();
 
-  if (text === "" || reference === "") {
-    alert("সব ঘর পূরণ করুন");
+  if(text=="" || reference==""){
+    alert("সব তথ্য লিখুন");
     return;
   }
 
-  push(ref(db, "messages"), {
-    text: text,
-    reference: reference,
-    time: Date.now()
+  push(ref(db,"messages"),{
+    text:text,
+    reference:reference,
+    time:Date.now()
   });
 
-  alert("Message Sent");
+  document.getElementById("message").value="";
+};
 
-  document.getElementById("text").value = "";
-  document.getElementById("reference").value = "";
+const msgQuery = query(ref(db,"messages"),limitToLast(10));
+
+onValue(msgQuery,(snapshot)=>{
+
+  chatBox.innerHTML="";
+
+  snapshot.forEach((child)=>{
+
+    const data = child.val();
+
+    chatBox.innerHTML += `
+      <div class="message">
+        ${data.text}
+      </div>
+    `;
+
+  });
+
+});
+
+onValue(ref(db,"replies"),(snapshot)=>{
+
+  if(!snapshot.exists()) return;
+
+  let html="";
+
+  snapshot.forEach((child)=>{
+
+    const data = child.val();
+
+    html += `
+      <div class="reply">
+        Admin: ${data.text}
+      </div>
+    `;
+
+  });
+
+  chatBox.innerHTML += html;
 
 });
