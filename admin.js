@@ -1,48 +1,49 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getDatabase,
-  ref,
-  onValue
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+getDatabase,
+ref,
+query,
+limitToLast,
+onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAtO9e2IQKCwYjAC5PuvCFYcYozTWe9Oyk",
-  authDomain: "monitijationhelper.firebaseapp.com",
-  databaseURL: "https://monitijationhelper-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "monitijationhelper",
-  storageBucket: "monitijationhelper.firebasestorage.app",
-  messagingSenderId: "251665802546",
-  appId: "1:251665802546:web:c41a366f15323b4bcaa32b"
+apiKey: "AIzaSyAtO9e2IQKCwYjAC5PuvCFYcYozTWe9Oyk",
+authDomain: "monitijationhelper.firebaseapp.com",
+databaseURL: "https://monitijationhelper-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId: "monitijationhelper",
+storageBucket: "monitijationhelper.firebasestorage.app",
+messagingSenderId: "251665802546",
+appId: "1:251665802546:web:c41a366f15323b4bcaa32b"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const messages = document.getElementById("messages");
+const messagesRef = query(
+ref(db, "messages"),
+limitToLast(10)
+);
 
-onValue(ref(db, "messages"), (snapshot) => {
+onValue(messagesRef, (snapshot) => {
 
-    messages.innerHTML = "";
+const box = document.getElementById("messages");
 
-    snapshot.forEach((child) => {
+box.innerHTML = "";
 
-        const data = child.val();
+snapshot.forEach((child) => {
 
-        messages.innerHTML += `
-        <div style="
-        background:#374151;
-        color:white;
-        padding:12px;
-        border-radius:10px;
-        margin-top:15px;
-        ">
-        <b>Text:</b><br>${data.text}<br><br>
+const data = child.val();
 
-        <b>Reference:</b><br>${data.reference}
-        </div>
-        `;
+box.innerHTML += `
+<div class="msg">
+<p><b>Text:</b> ${data.text}</p>
+<p><b>Reference:</b> ${data.reference}</p>
+<hr>
+</div>
+`;
 
-    });
+});
 
 });
