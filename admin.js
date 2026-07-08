@@ -2,10 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebas
 import {
   getDatabase,
   ref,
-  query,
-  limitToLast,
+  push,
   onValue,
-  push
+  query,
+  limitToLast
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -21,44 +21,59 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const messagesDiv = document.getElementById("messages");
+const chatBox = document.getElementById("messages");
+const replyInput = document.getElementById("replyText");
+const replyBtn = document.getElementById("replyBtn");
 
-const messagesQuery = query(ref(db, "messages"), limitToLast(10));
+const msgQuery = query(ref(db, "messages"), limitToLast(10));
 
-onValue(messagesQuery, (snapshot) => {
+let lastReference = "";
 
-  messagesDiv.innerHTML = "";
+onValue(msgQuery, (snapshot) => {
 
-  snapshot.forEach((child) => {
+    chatBox.innerHTML = "";
 
-    const data = child.val();
+    snapshot.forEach((child) => {
 
-    messagesDiv.innerHTML += `
-      <div style="background:#374151;color:white;padding:12px;border-radius:8px;margin-top:10px;">
-        <b>Message:</b><br>${data.text}<br><br>
-        <b>Reference:</b><br>${data.reference}
-      </div>
-    `;
-  });
+        const data = child.val();
+
+        lastReference = data.reference;
+
+        chatBox.innerHTML += `
+        <div class="message">
+        <b>Message:</b><br>
+        ${data.text}<br><br>
+
+        <b>Reference:</b><br>
+        ${data.reference}
+        </div>
+        `;
+
+    });
 
 });
 
-document.getElementById("replyBtn").onclick = function(){
+replyBtn.onclick = () => {
 
-  const reply = document.getElementById("replyText").value;
+    const reply = replyInput.value.trim();
 
-  if(reply==""){
-    alert("Reply লিখুন");
-    return;
-  }
+    if(reply==""){
+        alert("Write Reply");
+        return;
+    }
 
-  push(ref(db,"replies"),{
-    text:reply,
-    time:Date.now()
-  });
+    push(ref(db,"replies"),{
 
-  document.getElementById("replyText").value="";
+        reference:lastReference,
 
-  alert("Reply Sent");
+        text:reply,
+
+        time:Date.now()
+
+    });
+
+    replyInput.value="";
+
+    alert("Reply Sent");
 
 };
