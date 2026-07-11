@@ -1,87 +1,90 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { db } from "./firebase.js";
 
 import {
-  getDatabase,
-  ref,
-  push,
-  onValue,
-  query,
-  limitToLast
+ref,
+push,
+onValue,
+query,
+limitToLast
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAtO9e2IQKCwYjAC5PuvCFYcYozTWe9Oyk",
-  authDomain: "monitijationhelper.firebaseapp.com",
-  databaseURL: "https://monitijationhelper-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "monitijationhelper",
-  storageBucket: "monitijationhelper.firebasestorage.app",
-  messagingSenderId: "251665802546",
-  appId: "1:251665802546:web:c41a366f15323b4bcaa32b"
-};
+const sendBtn=document.getElementById("sendBtn");
+const chatBox=document.getElementById("chatBox");
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+if(sendBtn){
 
-const chatBox = document.getElementById("chatBox");
-const sendBtn = document.getElementById("sendBtn");
+sendBtn.onclick=function(){
 
-sendBtn.onclick = () => {
+const msg=document.getElementById("message").value.trim();
 
-  const text = document.getElementById("message").value.trim();
-  const reference = document.getElementById("reference").value.trim();
+if(msg=="") return;
 
-  if(text=="" || reference==""){
-    alert("সব তথ্য লিখুন");
-    return;
-  }
+push(ref(db,"creatorPortal/chat"),{
 
-  push(ref(db,"messages"),{
-    text:text,
-    reference:reference,
-    time:Date.now()
-  });
+sender:"user",
 
-  document.getElementById("message").value="";
-};
+text:msg,
 
-const msgQuery = query(ref(db,"messages"),limitToLast(10));
-
-onValue(msgQuery,(snapshot)=>{
-
-  chatBox.innerHTML="";
-
-  snapshot.forEach((child)=>{
-
-    const data = child.val();
-
-    chatBox.innerHTML += `
-      <div class="message">
-        ${data.text}
-      </div>
-    `;
-
-  });
+time:Date.now()
 
 });
 
-onValue(ref(db,"replies"),(snapshot)=>{
+document.getElementById("message").value="";
 
-  if(!snapshot.exists()) return;
+};
 
-  let html="";
+}
 
-  snapshot.forEach((child)=>{
+if(chatBox){
 
-    const data = child.val();
+const q=query(ref(db,"creatorPortal/chat"),limitToLast(10));
 
-    html += `
-      <div class="reply">
-        Admin: ${data.text}
-      </div>
-    `;
+onValue(q,(snapshot)=>{
 
-  });
+chatBox.innerHTML="";
 
-  chatBox.innerHTML += html;
+snapshot.forEach((child)=>{
+
+const d=child.val();
+
+if(d.sender=="user"){
+
+chatBox.innerHTML+=`
+<div class="message">
+${d.text}
+</div>
+`;
+
+}else{
+
+chatBox.innerHTML+=`
+<div class="reply">
+${d.text}
+</div>
+`;
+
+}
 
 });
+
+chatBox.scrollTop=chatBox.scrollHeight;
+
+});
+
+}
+
+const status=document.getElementById("adminMessage");
+
+if(status){
+
+onValue(ref(db,"creatorPortal/status"),(snapshot)=>{
+
+if(snapshot.exists()){
+
+status.innerHTML=snapshot.val().text;
+
+}
+
+});
+
+}
