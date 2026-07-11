@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Panel</title>
+<title>Admin Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -16,20 +16,33 @@
 
 <div class="container">
 
-<h2>Admin Panel</h2>
+<h2>Admin Dashboard</h2>
 
 <div id="messages"></div>
 
-<input
-type="text"
+<textarea
+id="statusText"
+placeholder="Write status message..."
+rows="4"></textarea>
+
+<button id="statusBtn">
+Update Status
+</button>
+
+<hr>
+
+<textarea
 id="replyText"
-placeholder="Type your reply">
+placeholder="Reply to user..."
+rows="4"></textarea>
 
 <button id="replyBtn">
 Send Reply
 </button>
 
 </div>
+
+<script type="module" src="firebase.js"></script>
 
 <script type="module" src="admin.js"></script>
 
