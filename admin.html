@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Dashboard</title>
+<title>Admin Panel</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -16,33 +16,30 @@
 
 <div class="container">
 
-<h2>Admin Dashboard</h2>
+<h2>Creator Support Admin</h2>
 
-<div id="messages"></div>
+<h3>Status Update</h3>
 
 <textarea
 id="statusText"
-placeholder="Write status message..."
-rows="4"></textarea>
+placeholder="Write status update..."
+rows="5"></textarea>
 
 <button id="statusBtn">
 Update Status
 </button>
 
-<hr>
+<hr style="margin:30px 0;">
 
-<textarea
-id="replyText"
-placeholder="Reply to user..."
-rows="4"></textarea>
+<h3>Support Requests</h3>
 
-<button id="replyBtn">
-Send Reply
-</button>
+<div id="requestList">
+
+Loading...
 
 </div>
 
-<script type="module" src="firebase.js"></script>
+</div>
 
 <script type="module" src="admin.js"></script>
 
