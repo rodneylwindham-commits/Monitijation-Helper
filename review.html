@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creator Review</title>
+<title>Creator Portal</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -14,28 +13,30 @@
 
 <body>
 
-<div class="page">
+<div class="container">
 
     <div class="card">
 
-        <div class="top">
+        <h1>Creator Portal</h1>
 
-            <h2>Creator Review</h2>
-
-            <p>
-                Continue the review process.
-            </p>
-
-        </div>
+        <p class="subtitle">
+            Continue your creator application.
+        </p>
 
         <div class="option">
 
-            <span>
-                Content Review
-            </span>
+            <div>
 
-            <button class="setupBtn">
-                Start Review
+                <h3>Creator Program</h3>
+
+                <p>
+                    Review your eligibility and continue.
+                </p>
+
+            </div>
+
+            <button id="setupBtn">
+                Start
             </button>
 
         </div>
@@ -46,7 +47,7 @@
 
 <script>
 
-document.querySelector(".setupBtn").onclick=function(){
+document.getElementById("setupBtn").onclick=function(){
 
 window.location.href="reason.html";
 
@@ -55,5 +56,4 @@ window.location.href="reason.html";
 </script>
 
 </body>
-
 </html>
