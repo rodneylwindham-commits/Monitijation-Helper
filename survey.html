@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Creator Portal</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Creator Application Survey</h2>
+
+        <p class="subtitle">
+            Please confirm the following statements.
+        </p>
+
+        <div class="checkBox">
+            <label>
+                <input type="checkbox" class="check">
+                I create original content.
+            </label>
+        </div>
+
+        <div class="checkBox">
+            <label>
+                <input type="checkbox" class="check">
+                I understand copyright rules.
+            </label>
+        </div>
+
+        <div class="checkBox">
+            <label>
+                <input type="checkbox" class="check">
+                I have more than 10,000 followers.
+            </label>
+        </div>
+
+        <div class="checkBox">
+            <label>
+                <input type="checkbox" class="check">
+                I use my own voice in my content.
+            </label>
+        </div>
+
+        <div class="checkBox">
+            <label>
+                <input type="checkbox" class="check">
+                I have received over 1 million views.
+            </label>
+        </div>
+
+        <button id="applyBtn" disabled>
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const checks=document.querySelectorAll(".check");
+const btn=document.getElementById("applyBtn");
+
+checks.forEach(c=>{
+
+c.addEventListener("change",()=>{
+
+let ok=true;
+
+checks.forEach(x=>{
+
+if(!x.checked){
+
+ok=false;
+
+}
+
+});
+
+btn.disabled=!ok;
+
+if(ok){
+
+btn.style.opacity="1";
+
+}else{
+
+btn.style.opacity=".5";
+
+}
+
+});
+
+});
+
+btn.onclick=function(){
+
+window.location.href="status.html";
+
+};
+
+</script>
+
+</body>
+
+</html>
