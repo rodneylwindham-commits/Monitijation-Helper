@@ -2,87 +2,58 @@ import { db } from "./firebase.js";
 
 import {
 ref,
-push,
 set,
-onValue,
-query,
-limitToLast
+onValue
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-const messages=document.getElementById("messages");
-const replyBtn=document.getElementById("replyBtn");
-const statusBtn=document.getElementById("statusBtn");
+const statusBtn = document.getElementById("statusBtn");
+const requestList = document.getElementById("requestList");
 
-const q=query(
-ref(db,"creatorPortal/chat"),
-limitToLast(10)
-);
+statusBtn.onclick = function () {
 
-onValue(q,(snapshot)=>{
+    const text = document.getElementById("statusText").value.trim();
 
-messages.innerHTML="";
+    if (text === "") {
+        alert("Please write a status.");
+        return;
+    }
 
-snapshot.forEach((child)=>{
+    set(ref(db, "creatorPortal/status"), {
+        text: text,
+        time: Date.now()
+    });
 
-const data=child.val();
-
-let cls=data.sender=="admin"
-?"reply"
-:"message";
-
-messages.innerHTML+=`
-<div class="${cls}">
-<b>${data.sender}</b><br>
-${data.text}
-</div>
-`;
-
-});
-
-messages.scrollTop=messages.scrollHeight;
-
-});
-
-replyBtn.onclick=function(){
-
-const txt=document.getElementById("replyText").value.trim();
-
-if(txt==""){
-alert("Write a reply.");
-return;
-}
-
-push(ref(db,"creatorPortal/chat"),{
-
-sender:"admin",
-
-text:txt,
-
-time:Date.now()
-
-});
-
-document.getElementById("replyText").value="";
+    alert("Status Updated");
 
 };
 
-statusBtn.onclick=function(){
+onValue(ref(db, "creatorPortal/requests"), (snapshot) => {
 
-const txt=document.getElementById("statusText").value.trim();
+    requestList.innerHTML = "";
 
-if(txt==""){
-alert("Write a status.");
-return;
-}
+    if (!snapshot.exists()) {
 
-set(ref(db,"creatorPortal/status"),{
+        requestList.innerHTML = "<p>No requests found.</p>";
+        return;
 
-text:txt,
+    }
 
-time:Date.now()
+    snapshot.forEach((child) => {
+
+        const data = child.val();
+
+        requestList.innerHTML += `
+
+        <div class="review-card">
+
+            <p><b>Request:</b> ${data.subject}</p>
+
+            <p><b>Message:</b> ${data.message}</p>
+
+        </div>
+
+        `;
+
+    });
 
 });
-
-alert("Status Updated");
-
-};
