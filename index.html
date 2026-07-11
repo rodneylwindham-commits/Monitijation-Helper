@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Creator Support</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -29,7 +33,28 @@ Next
 
 </div>
 
-<script src="script.js"></script>
+<script>
+
+document.getElementById("nextBtn").addEventListener("click", function () {
+
+const link = document.getElementById("pageLink").value.trim();
+
+if(link===""){
+
+alert("Please paste your link.");
+
+return;
+
+}
+
+localStorage.setItem("pageLink", link);
+
+window.location.href = "review.html";
+
+});
+
+</script>
 
 </body>
+
 </html>
