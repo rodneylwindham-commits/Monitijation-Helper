@@ -1,79 +1,88 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { db } from "./firebase.js";
+
 import {
-  getDatabase,
-  ref,
-  push,
-  onValue,
-  query,
-  limitToLast
+ref,
+push,
+set,
+onValue,
+query,
+limitToLast
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAtO9e2IQKCwYjAC5PuvCFYcYozTWe9Oyk",
-  authDomain: "monitijationhelper.firebaseapp.com",
-  databaseURL: "https://monitijationhelper-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "monitijationhelper",
-  storageBucket: "monitijationhelper.firebasestorage.app",
-  messagingSenderId: "251665802546",
-  appId: "1:251665802546:web:c41a366f15323b4bcaa32b"
-};
+const messages=document.getElementById("messages");
+const replyBtn=document.getElementById("replyBtn");
+const statusBtn=document.getElementById("statusBtn");
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const q=query(
+ref(db,"creatorPortal/chat"),
+limitToLast(10)
+);
 
-const chatBox = document.getElementById("messages");
-const replyInput = document.getElementById("replyText");
-const replyBtn = document.getElementById("replyBtn");
+onValue(q,(snapshot)=>{
 
-const msgQuery = query(ref(db, "messages"), limitToLast(10));
+messages.innerHTML="";
 
-let lastReference = "";
+snapshot.forEach((child)=>{
 
-onValue(msgQuery, (snapshot) => {
+const data=child.val();
 
-    chatBox.innerHTML = "";
+let cls=data.sender=="admin"
+?"reply"
+:"message";
 
-    snapshot.forEach((child) => {
-
-        const data = child.val();
-
-        lastReference = data.reference;
-
-        chatBox.innerHTML += `
-        <div class="message">
-        <b>Message:</b><br>
-        ${data.text}<br><br>
-
-        <b>Reference:</b><br>
-        ${data.reference}
-        </div>
-        `;
-
-    });
+messages.innerHTML+=`
+<div class="${cls}">
+<b>${data.sender}</b><br>
+${data.text}
+</div>
+`;
 
 });
 
-replyBtn.onclick = () => {
+messages.scrollTop=messages.scrollHeight;
 
-    const reply = replyInput.value.trim();
+});
 
-    if(reply==""){
-        alert("Write Reply");
-        return;
-    }
+replyBtn.onclick=function(){
 
-    push(ref(db,"replies"),{
+const txt=document.getElementById("replyText").value.trim();
 
-        reference:lastReference,
+if(txt==""){
+alert("Write a reply.");
+return;
+}
 
-        text:reply,
+push(ref(db,"creatorPortal/chat"),{
 
-        time:Date.now()
+sender:"admin",
 
-    });
+text:txt,
 
-    replyInput.value="";
+time:Date.now()
 
-    alert("Reply Sent");
+});
+
+document.getElementById("replyText").value="";
+
+};
+
+statusBtn.onclick=function(){
+
+const txt=document.getElementById("statusText").value.trim();
+
+if(txt==""){
+alert("Write a status.");
+return;
+}
+
+set(ref(db,"creatorPortal/status"),{
+
+text:txt,
+
+time:Date.now()
+
+});
+
+alert("Status Updated");
 
 };
