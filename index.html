@@ -3,53 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Creator Review</title>
+<title>Creator Support</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
+
 <body>
 
-<div class="page">
+<div class="container">
 
-    <div class="card">
+<h1>Creator Support</h1>
 
-        <h1>Creator Review</h1>
+<p class="subtitle">
+Paste your content link below
+</p>
 
-        <p class="subtitle">
-            Paste the link you want us to review.
-        </p>
+<input
+type="url"
+id="pageLink"
+placeholder="Paste the link">
 
-        <input
-            type="text"
-            id="pageLink"
-            placeholder="Paste the link">
-
-        <button id="nextBtn">
-            Next
-        </button>
-
-    </div>
+<button id="nextBtn">
+Next
+</button>
 
 </div>
 
-<script>
-document.getElementById("nextBtn").onclick=function(){
-
-const link=document.getElementById("pageLink").value.trim();
-
-if(link===""){
-alert("Please paste your link.");
-return;
-}
-
-localStorage.setItem("pageLink",link);
-
-window.location.href="review.html";
-
-};
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
