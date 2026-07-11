@@ -1,30 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sample Login UI</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Monetization Portal</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="container">
+    <div class="container">
+        <!-- Step 1: Paste Link -->
+        <div class="card active" id="step1">
+            <input type="text" placeholder="Paste the link" class="input-field">
+            <button class="btn btn-blue" onclick="nextStep(2)">Next</button>
+        </div>
 
-    <div class="logo">
-        <div class="circle">f</div>
+        <!-- Step 2: Content Monetization Set Up -->
+        <div class="card" id="step2">
+            <div class="flex-row">
+                <h2>Content Monetization</h2>
+                <button class="btn-capsule" onclick="nextStep(3)">Set Up</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Why Monetization -->
+        <div class="card" id="step3">
+            <h3>Why You Want To Content Monetization?</h3>
+            <textarea placeholder="Write your reason here..." class="textarea-field"></textarea>
+            <button class="btn btn-blue" onclick="nextStep(4)">Next</button>
+        </div>
+
+        <!-- Step 4: Survey/Checklist -->
+        <div class="card" id="step4">
+            <h3>Survey Questions</h3>
+            <div class="survey-list">
+                <label class="checkbox-container">I create authentic content.
+                    <input type="checkbox" class="survey-check" onchange="checkSurvey()">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">I know about copyright.
+                    <input type="checkbox" class="survey-check" onchange="checkSurvey()">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">I have over 10,000 followers.
+                    <input type="checkbox" class="survey-check" onchange="checkSurvey()">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">I have content in my own voice.
+                    <input type="checkbox" class="survey-check" onchange="checkSurvey()">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container">I have over 1,000,000 views.
+                    <input type="checkbox" class="survey-check" onchange="checkSurvey()">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <button class="btn btn-disabled" id="surveyBtn" disabled onclick="nextStep(5)">Next and Apply</button>
+        </div>
+
+        <!-- Step 5: Monitoring & Admin Text -->
+        <div class="card" id="step5">
+            <p class="info-text">We will monitor your page, which may take up to 12 hours. Please check back after some time.</p>
+            <div class="admin-box">
+                <p id="adminDynamicText">Loading updates from admin...</p>
+            </div>
+            <button class="btn btn-blue" onclick="nextStep(6)">Next</button>
+        </div>
+
+        <!-- Step 6: Facebook Style Chatbox -->
+        <div class="card chat-card" id="step6">
+            <div class="fb-header">
+                <span class="close-icon">✕</span>
+                <div class="lang-selector">English (US) ▾</div>
+            </div>
+            
+            <div class="fb-logo-container">
+                <svg class="fb-logo" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+
+            <div class="chat-box" id="chatBox">
+                <div class="message system">You can now chat with the admin directly below.</div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatPress(event)">
+                <button class="send-btn" onclick="sendChatMessage()">Send</button>
+            </div>
+            
+            <div class="fb-footer">
+                <span class="meta-text">Infinity Meta</span>
+            </div>
+        </div>
     </div>
 
-    <input type="text" placeholder="Enter Text">
-
-    <input type="password" placeholder="Reference">
-
-    <button>Send</button>
-
-    <p class="forgot">Forgot Reference?</p>
-
-    <button class="create">Create New</button>
-
-</div>
-
+    <script src="script.js"></script>
 </body>
 </html>
