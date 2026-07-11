@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -10,168 +9,64 @@
 
 <link rel="stylesheet" href="style.css">
 
-<style>
-
-.status-card{
-
-padding:30px;
-
-text-align:center;
-
-}
-
-.icon{
-
-width:80px;
-height:80px;
-
-margin:auto;
-
-border-radius:50%;
-
-background:#1877f2;
-
-color:white;
-
-font-size:42px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-margin-bottom:20px;
-
-}
-
-.status{
-
-background:#eef5ff;
-
-border:1px solid #c9dcff;
-
-padding:15px;
-
-border-radius:12px;
-
-margin-top:20px;
-
-color:#333;
-
-line-height:1.6;
-
-}
-
-#adminMessage{
-
-margin-top:20px;
-
-background:#f7f7f7;
-
-padding:15px;
-
-border-radius:12px;
-
-font-weight:bold;
-
-display:none;
-
-}
-
-button{
-
-margin-top:25px;
-
-width:100%;
-
-padding:14px;
-
-border:none;
-
-border-radius:30px;
-
-background:#1877f2;
-
-color:white;
-
-font-size:18px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-}
-
-</style>
-
 </head>
 
 <body>
 
 <div class="container">
 
+<h2>Application Under Review</h2>
+
 <div class="status-card">
 
-<div class="icon">✓</div>
+<h3>Review in Progress</h3>
 
-<h2>Application Submitted</h2>
+<p>
+Your request has been received successfully.
+</p>
 
-<div class="status">
-
-Your application has been received successfully.
-
-Our team is reviewing the information you submitted.
-
-The review process may take up to 12 hours.
-
+<p>
+Our team is reviewing your application.
+This process may take up to
+<b>12 hours</b>.
 Please check back later for updates.
+</p>
 
 </div>
 
-<div id="adminMessage"></div>
+<div id="adminStatus" class="admin-status">
+
+Waiting for update...
+
+</div>
 
 <button id="nextBtn">
-Next
-</button>
 
-</div>
+Next
+
+</button>
 
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { db } from "./firebase.js";
 
 import {
-getDatabase,
+
 ref,
+
 onValue
+
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-const firebaseConfig={
-apiKey:"AIzaSyAtO9e2IQKCwYjAC5PuvCFYcYozTWe9Oyk",
-authDomain:"monitijationhelper.firebaseapp.com",
-databaseURL:"https://monitijationhelper-default-rtdb.asia-southeast1.firebasedatabase.app",
-projectId:"monitijationhelper",
-storageBucket:"monitijationhelper.firebasestorage.app",
-messagingSenderId:"251665802546",
-appId:"1:251665802546:web:c41a366f15323b4bcaa32b"
-};
+const status=document.getElementById("adminStatus");
 
-const app=initializeApp(firebaseConfig);
-
-const db=getDatabase(app);
-
-const msg=document.getElementById("adminMessage");
-
-onValue(ref(db,"statusMessage"),(snapshot)=>{
+onValue(ref(db,"creatorPortal/status"),(snapshot)=>{
 
 if(snapshot.exists()){
 
-msg.style.display="block";
-
-msg.innerHTML=snapshot.val().text;
+status.innerHTML=snapshot.val().text;
 
 }
 
@@ -179,12 +74,11 @@ msg.innerHTML=snapshot.val().text;
 
 document.getElementById("nextBtn").onclick=function(){
 
-window.location.href="chat.html";
+window.location.href="request.html";
 
 };
 
 </script>
 
 </body>
-
 </html>
