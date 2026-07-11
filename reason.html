@@ -1,52 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Creator Portal</title>
+<title>Reason</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="card">
+<h2>Why do you want Content Monetization?</h2>
 
-        <h2>
-            Why do you want to join our Creator Program?
-        </h2>
+<p class="subtitle">
+Please tell us briefly.
+</p>
 
-        <p class="subtitle">
-            Please tell us briefly.
-        </p>
+<textarea
+id="reason"
+placeholder="Write here..."
+rows="8"></textarea>
 
-        <textarea
-        id="reason"
-        placeholder="Write your answer here..."
-        rows="8"></textarea>
-
-        <button id="nextBtn">
-            Next
-        </button>
-
-    </div>
+<button id="nextBtn">
+Next
+</button>
 
 </div>
 
 <script>
-
 document.getElementById("nextBtn").onclick=function(){
 
 const reason=document.getElementById("reason").value.trim();
 
 if(reason==""){
-alert("Please write your answer.");
+alert("Please write something.");
 return;
 }
 
@@ -54,10 +43,8 @@ localStorage.setItem("reason",reason);
 
 window.location.href="survey.html";
 
-}
-
+};
 </script>
 
 </body>
-
 </html>
