@@ -1,90 +1,117 @@
-import { db } from "./firebase.js";
+// ---------- Index ----------
+const pageLink = document.getElementById("pageLink");
+const nextBtn = document.getElementById("nextBtn");
 
-import {
-ref,
-push,
-onValue,
-query,
-limitToLast
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+if (nextBtn && pageLink) {
+    nextBtn.onclick = function () {
 
-const sendBtn=document.getElementById("sendBtn");
-const chatBox=document.getElementById("chatBox");
+        if (pageLink.value.trim() === "") {
+            alert("Please paste your link.");
+            return;
+        }
 
-if(sendBtn){
+        localStorage.setItem("pageLink", pageLink.value.trim());
 
-sendBtn.onclick=function(){
+        window.location.href = "review.html";
+    };
+}
 
-const msg=document.getElementById("message").value.trim();
+// ---------- Review ----------
+const setupBtn = document.getElementById("setupBtn");
 
-if(msg=="") return;
+if (setupBtn) {
 
-push(ref(db,"creatorPortal/chat"),{
+    setupBtn.onclick = function () {
 
-sender:"user",
+        window.location.href = "reason.html";
 
-text:msg,
-
-time:Date.now()
-
-});
-
-document.getElementById("message").value="";
-
-};
+    };
 
 }
 
-if(chatBox){
+// ---------- Reason ----------
+const reasonBtn = document.getElementById("reasonNext");
+const reasonBox = document.getElementById("reason");
 
-const q=query(ref(db,"creatorPortal/chat"),limitToLast(10));
+if (reasonBtn && reasonBox) {
 
-onValue(q,(snapshot)=>{
+    reasonBtn.onclick = function () {
 
-chatBox.innerHTML="";
+        if (reasonBox.value.trim() == "") {
 
-snapshot.forEach((child)=>{
+            alert("Please write something.");
 
-const d=child.val();
+            return;
 
-if(d.sender=="user"){
+        }
 
-chatBox.innerHTML+=`
-<div class="message">
-${d.text}
-</div>
-`;
+        localStorage.setItem("reason", reasonBox.value.trim());
 
-}else{
+        window.location.href = "survey.html";
 
-chatBox.innerHTML+=`
-<div class="reply">
-${d.text}
-</div>
-`;
+    };
 
 }
 
-});
+// ---------- Survey ----------
+const applyBtn = document.getElementById("applyBtn");
 
-chatBox.scrollTop=chatBox.scrollHeight;
+if (applyBtn) {
 
-});
+    const checks = document.querySelectorAll(".check");
+
+    function checkAll() {
+
+        let ok = true;
+
+        checks.forEach(c => {
+
+            if (!c.checked) ok = false;
+
+        });
+
+        applyBtn.disabled = !ok;
+
+    }
+
+    checks.forEach(c => {
+
+        c.addEventListener("change", checkAll);
+
+    });
+
+    applyBtn.onclick = function () {
+
+        window.location.href = "status.html";
+
+    };
 
 }
 
-const status=document.getElementById("adminMessage");
+// ---------- Status ----------
+const statusNext = document.getElementById("statusNext");
 
-if(status){
+if (statusNext) {
 
-onValue(ref(db,"creatorPortal/status"),(snapshot)=>{
+    statusNext.onclick = function () {
 
-if(snapshot.exists()){
+        window.location.href = "request.html";
 
-status.innerHTML=snapshot.val().text;
+    };
 
 }
 
-});
+// ---------- Success ----------
+const finishBtn = document.getElementById("finishBtn");
+
+if (finishBtn) {
+
+    finishBtn.onclick = function () {
+
+        localStorage.clear();
+
+        window.location.href = "index.html";
+
+    };
 
 }
